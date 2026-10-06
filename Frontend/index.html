@@ -5,6 +5,45 @@
     <link rel="icon" type="image/jpeg" href="/images/car-04.jpg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Dauer Classic Cars Museum</title>
+
+    <script>
+      // Round favicon: crops the icon image into a circle (center crop)
+      // and swaps it in. If anything fails, the normal square icon stays.
+      (function () {
+        var link = document.querySelector("link[rel='icon']");
+        if (!link) return;
+
+        var img = new Image();
+        img.onload = function () {
+          try {
+            var size = 128;
+            var canvas = document.createElement("canvas");
+            canvas.width = size;
+            canvas.height = size;
+            var ctx = canvas.getContext("2d");
+
+            // circle mask
+            ctx.beginPath();
+            ctx.arc(size / 2, size / 2, size / 2, 0, Math.PI * 2);
+            ctx.closePath();
+            ctx.clip();
+
+            // center-crop to a square so the car isn't stretched
+            var side = Math.min(img.width, img.height);
+            var sx = (img.width - side) / 2;
+            var sy = (img.height - side) / 2;
+            ctx.drawImage(img, sx, sy, side, side, 0, 0, size, size);
+
+            link.type = "image/png";
+            link.href = canvas.toDataURL("image/png");
+          } catch (e) {
+            /* keep original icon */
+          }
+        };
+        img.src = link.getAttribute("href");
+      })();
+    </script>
+
     <script>
       // GitHub Pages SPA: restore path after 404 redirect
       (function () {
