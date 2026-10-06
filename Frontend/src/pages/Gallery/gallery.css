@@ -1151,3 +1151,118 @@
     transition: none;
   }
 }
+
+
+/* =========================================================
+   INTRO — "A Visual Journey / Cars with character."
+   (paste at the very end of gallery.css)
+========================================================= */
+
+.gv-intro {
+  background: #f5efe2;
+  padding: clamp(56px, 8vw, 90px) 8%;
+}
+
+.gv-intro-inner {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.gv-intro-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: clamp(32px, 6vw, 80px);
+  align-items: end;
+}
+
+.gv-intro-head,
+.gv-intro-text {
+  min-width: 0;
+}
+
+.gallery-page .gv-intro-label {
+  display: inline-flex;
+  margin-bottom: 20px;
+  color: #a67d35;
+}
+
+.gallery-page .gv-intro-title {
+  margin: 16px 0 0;
+
+  color: #183128;
+
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(40px, 6vw, 80px);
+  font-weight: 400;
+  line-height: 0.95;
+  letter-spacing: -0.04em;
+
+  overflow-wrap: break-word;
+}
+
+.gv-intro-title em {
+  color: #c5a05a;
+  font-style: italic;
+}
+
+.gallery-page .gv-intro-text p {
+  margin: 0 0 18px;
+
+  color: #6d706a;
+  font-size: clamp(14px, 1.4vw, 15px);
+  line-height: 1.9;
+
+  overflow-wrap: break-word;
+}
+
+.gallery-page .gv-intro-text p:last-child {
+  margin-bottom: 0;
+}
+
+/* ---------- Tablet ---------- */
+
+@media (max-width: 950px) {
+  .gv-intro {
+    padding-left: 6%;
+    padding-right: 6%;
+  }
+}
+
+/* ---------- Mobile: one column, text under the heading ---------- */
+
+@media (max-width: 767px) {
+  .gv-intro {
+    padding: 60px 20px 64px;
+  }
+
+  .gv-intro-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 26px;
+    align-items: start;
+  }
+
+  .gallery-page .gv-intro-title {
+    font-size: clamp(38px, 11vw, 52px);
+    line-height: 1;
+    letter-spacing: -0.03em;
+  }
+
+  .gallery-page .gv-intro-text p {
+    font-size: 14px;
+    line-height: 1.85;
+    margin-bottom: 16px;
+  }
+}
+
+/* ---------- Very small phones ---------- */
+
+@media (max-width: 380px) {
+  .gv-intro {
+    padding: 52px 16px 56px;
+  }
+
+  .gallery-page .gv-intro-title {
+    font-size: 36px;
+  }
+}
