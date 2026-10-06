@@ -71,6 +71,57 @@ function VideoCard({ id, title }) {
   );
 }
 
+
+
+/* ---------------------------------------------------------
+   1) PASTE THIS ABOVE "function About()" (next to FACTS)
+   Add your video links in `href`. Leave "" to show a plain image.
+--------------------------------------------------------- */
+const SHOWCASE = [
+  {
+    size: "large",
+    src: "https://dauercars.com/wp-content/uploads/2023/05/Dauer-SOFLO-Health-Video.jpg",
+    alt: "Dauer Classic Cars featured on SoFlo Health",
+    href: "https://www.youtube.com/watch?v=qO5xg2bgoug", // <-- paste video link here
+  },
+  {
+    size: "small",
+    src: "https://dauercars.com/wp-content/uploads/2021/04/So-Flo-Home-Thumbnail-1024x576.jpg",
+    alt: "Dauer Classic Cars featured on SoFlo Home",
+    href: "https://www.youtube.com/watch?v=Yq6xEgJV0Qc", // <-- paste video link here
+  },
+  {
+    size: "small",
+    src: "https://dauercars.com/wp-content/uploads/2021/04/Dauer-Classic-Car-Museum-South-Florida-2.jpg",
+    alt: "Dauer Classic Car Museum South Florida",
+    href: "", // <-- paste link here (or leave empty)
+  },
+];
+
+/* ---------------------------------------------------------
+   2) PASTE THIS ABOVE "function About()" too (small helper)
+--------------------------------------------------------- */
+function ShowcaseImage({ src, alt, href }) {
+  const img = <img src={src} alt={alt} loading="lazy" decoding="async" />;
+ 
+  // No link yet → plain image (same as before)
+  if (!href) return img;
+ 
+  return (
+    <a
+      className="heritage-showcase-link"
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label={`Watch video: ${alt} (opens in a new tab)`}
+    >
+      {img}
+      <span className="heritage-showcase-play" aria-hidden="true">▶</span>
+      <span className="heritage-showcase-cta" aria-hidden="true">WATCH VIDEO</span>
+    </a>
+  );
+}
+
 /* ---------------------------------------------------------
    PAGE
 --------------------------------------------------------- */
@@ -155,34 +206,14 @@ function About() {
       {/* ================= IMAGE SHOWCASE ================= */}
       <section className="heritage-about-image-showcase">
         <div className="heritage-about-container heritage-image-showcase-grid">
-
-          <div className="heritage-large-image">
-            <img
-              src="https://dauercars.com/wp-content/uploads/2023/05/Dauer-SOFLO-Health-Video.jpg"
-              alt="Dauer Classic Cars featured on SoFlo Health"
-              loading="lazy"
-              decoding="async"
-            />
-          </div>
-
-          <div className="heritage-small-image">
-            <img
-              src="https://dauercars.com/wp-content/uploads/2021/04/So-Flo-Home-Thumbnail-1024x576.jpg"
-              alt="Dauer Classic Cars featured on SoFlo Home"
-              loading="lazy"
-              decoding="async"
-            />
-          </div>
-
-          <div className="heritage-small-image">
-            <img
-              src="https://dauercars.com/wp-content/uploads/2021/04/Dauer-Classic-Car-Museum-South-Florida-2.jpg"
-              alt="Dauer Classic Car Museum South Florida"
-              loading="lazy"
-              decoding="async"
-            />
-          </div>
-
+          {SHOWCASE.map((item) => (
+            <div
+              key={item.src}
+              className={item.size === "large" ? "heritage-large-image" : "heritage-small-image"}
+            >
+              <ShowcaseImage src={item.src} alt={item.alt} href={item.href} />
+            </div>
+          ))}
         </div>
       </section>
 
