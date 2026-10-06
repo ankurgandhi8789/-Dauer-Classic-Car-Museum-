@@ -265,20 +265,21 @@ export default function Gallery() {
       </section>
 
       {/* ── INTRO ── */}
-      <section style={{ background: "#f5efe2", padding: "90px 8%" }}>
-        <div style={{ maxWidth: 1200, margin: "auto" }}>
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 80, alignItems: "end" }}>
-            <div>
-              <span className="gallery-label" style={{ color: "#a67d35", marginBottom: 20, display: "inline-flex" }}>A Visual Journey</span>
-              <h2 style={{ fontFamily: "Georgia, serif", fontSize: "clamp(48px, 6vw, 80px)", fontWeight: 400, lineHeight: 0.9, letterSpacing: "-3px", color: "#183128", margin: "16px 0 0" }}>
-                Cars with <em style={{ color: "#c5a05a", fontStyle: "italic" }}>character.</em>
+      {/* ── INTRO ── */}
+      <section className="gv-intro">
+        <div className="gv-intro-inner">
+          <div className="gv-intro-grid">
+            <div className="gv-intro-head">
+              <span className="gallery-label gv-intro-label">A Visual Journey</span>
+              <h2 className="gv-intro-title">
+                Cars with <em>character.</em>
               </h2>
             </div>
-            <div>
-              <p style={{ color: "#6d706a", fontSize: 15, lineHeight: 1.9, margin: "0 0 18px" }}>
+            <div className="gv-intro-text">
+              <p>
                 They say that a picture is worth a thousand words, but at Dauer Classic Cars a picture is worth a thousand memories.
               </p>
-              <p style={{ color: "#6d706a", fontSize: 15, lineHeight: 1.9, margin: 0 }}>
+              <p>
                 Explore the automobiles, memorabilia and atmosphere that make the Dauer collection unique.
               </p>
             </div>
