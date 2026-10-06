@@ -1,0 +1,342 @@
+@import url('https://fonts.googleapis.com/css2?family=PT+Sans:ital,wght@0,400;0,700;1,400;1,700&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+@import "tailwindcss";
+
+/* =========================================================
+   GLOBAL
+   ========================================================= */
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  overflow-x: hidden;
+  background: #f5efe2;
+  color: #1c1b17;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+a {
+  text-decoration: none;
+}
+
+button {
+  font-family: inherit;
+}
+
+#root {
+  width: 100%;
+  max-width: 100%;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+}
+
+
+/* =========================================================
+   HERO IMAGE
+   ========================================================= */
+
+.hero-image {
+  animation: heroReveal 1.4s ease-out both;
+  transition: transform 1.2s ease, filter 1.2s ease;
+}
+
+.hero-image:hover {
+  transform: scale(1.015);
+}
+
+.hero-heading {
+  margin: 0;
+  max-width: 760px;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: clamp(3.3rem, 7vw, 8.4rem);
+  line-height: 0.82;
+  letter-spacing: -0.06em;
+  font-weight: 700;
+  color: #f8f3e8;
+  text-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+}
+
+.hero-line {
+  display: block;
+}
+
+.hero-line-accent {
+  color: #d4af62;
+  font-style: italic;
+  font-weight: 500;
+  text-shadow: 0 12px 26px rgba(212, 175, 98, 0.25);
+}
+
+.hero-copy {
+  margin-top: 2rem;
+  max-width: 40rem;
+  font-size: clamp(1.05rem, 1.7vw, 1.45rem);
+  line-height: 1.7;
+  color: rgba(238, 230, 215, 0.96);
+}
+
+
+/* =========================================================
+   GOLD LUXURY BUTTON
+   ========================================================= */
+
+.btn-gold {
+  position: relative;
+  overflow: hidden;
+  color: #17130d;
+  background: linear-gradient(135deg, #b88e42 0%, #d0aa5d 45%, #e0bd72 100%);
+  border: 1px solid rgba(235, 207, 143, 0.7);
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.22);
+  transition: transform 350ms ease, box-shadow 350ms ease, filter 350ms ease;
+}
+
+.btn-gold::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -120%;
+  width: 65%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.25), transparent);
+  transform: skewX(-20deg);
+  transition: left 650ms ease;
+}
+
+.btn-gold:hover {
+  transform: translateY(-3px);
+  filter: brightness(1.05);
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.30), inset 0 1px 0 rgba(255, 255, 255, 0.28);
+}
+
+.btn-gold:hover::before {
+  left: 140%;
+}
+
+
+/* =========================================================
+   OUTLINE BUTTON
+   ========================================================= */
+
+.btn-outline {
+  position: relative;
+  color: #f8f3e8;
+  border: 1px solid rgba(224, 191, 115, 0.8);
+  background: rgba(20, 18, 14, 0.18);
+  backdrop-filter: blur(4px);
+  transition: color 350ms ease, background 350ms ease, transform 350ms ease, box-shadow 350ms ease;
+}
+
+.btn-outline:hover {
+  color: #1a1711;
+  background: #c5a05a;
+  transform: translateY(-3px);
+  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.16);
+}
+
+
+/* =========================================================
+   GREEN SECTION OUTLINE BUTTON
+   ========================================================= */
+
+.btn-outline-gold {
+  color: #d4af62;
+  border: 1px solid rgba(212, 175, 98, 0.8);
+  background: transparent;
+  transition: color 350ms ease, background 350ms ease, transform 350ms ease, box-shadow 350ms ease;
+}
+
+.btn-outline-gold:hover {
+  color: #183128;
+  background: #d4af62;
+  transform: translateY(-3px);
+  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.16);
+}
+
+
+/* =========================================================
+   COLLECTION CARDS
+   ========================================================= */
+
+.luxury-card {
+  overflow: hidden;
+  border: 1px solid rgba(166, 125, 53, 0.22);
+  background: #fbf8f1;
+  box-shadow: 0 8px 25px rgba(35, 29, 18, 0.04);
+  transition: transform 500ms cubic-bezier(0.2, 0.7, 0.2, 1), box-shadow 500ms ease;
+}
+
+.luxury-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 22px 45px rgba(35, 29, 18, 0.12);
+}
+
+
+/* =========================================================
+   LUXURY IMAGES
+   ========================================================= */
+
+.luxury-image {
+  display: block;
+  transform: scale(1);
+  transition: transform 900ms cubic-bezier(0.2, 0.7, 0.2, 1), filter 900ms ease;
+}
+
+.luxury-card:hover .luxury-image {
+  transform: scale(1.07);
+  filter: saturate(1.05) contrast(1.02);
+}
+
+
+/* =========================================================
+   IMAGE OVERLAY
+   ========================================================= */
+
+.image-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(180deg, transparent 55%, rgba(20, 16, 10, 0.16));
+  opacity: 0;
+  transition: opacity 500ms ease;
+}
+
+.luxury-card:hover .image-overlay {
+  opacity: 1;
+}
+
+
+/* =========================================================
+   STORY IMAGE
+   ========================================================= */
+
+.story-image-wrapper {
+  position: relative;
+  transition: transform 700ms cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.story-image-wrapper:hover {
+  transform: translateY(-4px);
+}
+
+@media (max-width: 1024px) {
+  .story-image-wrapper {
+    max-width: 720px;
+    margin: 0 auto;
+  }
+}
+
+@media (max-width: 640px) {
+  .story-image-wrapper {
+    width: 100%;
+  }
+
+  .story-content h2 {
+    font-size: 3.2rem;
+  }
+
+  .btn-gold {
+    min-height: 54px;
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+}
+
+@media (max-width: 380px) {
+  .story-content h2 {
+    font-size: 2.7rem;
+  }
+
+  .btn-gold {
+    width: 100%;
+  }
+}
+
+
+/* =========================================================
+   EXPERIENCE COLLAGE
+   ========================================================= */
+
+.experience-large-image,
+.experience-small-image {
+  display: block;
+  transform: scale(1);
+  transition: transform 900ms cubic-bezier(0.2, 0.7, 0.2, 1), filter 900ms ease;
+}
+
+.experience-large-image:hover,
+.experience-small-image:hover {
+  transform: scale(1.045);
+  filter: saturate(1.05) contrast(1.02);
+}
+
+
+/* =========================================================
+   FOOTER LINKS
+   ========================================================= */
+
+.footer-link {
+  color: #aaa9a2;
+  transition: color 300ms ease, transform 300ms ease;
+}
+
+.footer-link:hover {
+  color: #d4af62;
+  transform: translateX(5px);
+}
+
+
+/* =========================================================
+   ANIMATIONS
+   ========================================================= */
+
+@keyframes heroReveal {
+  from { opacity: 0; transform: scale(1.04); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(25px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+
+/* =========================================================
+   REDUCED MOTION
+   ========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 1024px) {
+  .hero-image { object-position: center; }
+}
+
+@media (max-width: 640px) {
+  body { font-size: 15px; }
+  .hero-image { object-position: 58% center; }
+  .experience-large-image { min-height: 340px; }
+}
+
+@media (max-width: 380px) {
+  .btn-gold,
+  .btn-outline,
+  .btn-outline-gold { width: 100%; }
+}

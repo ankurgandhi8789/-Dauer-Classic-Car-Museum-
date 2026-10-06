@@ -1,0 +1,950 @@
+/* =========================================================
+   VINTAGE AUTOMOBILE — HERITAGE LUXURY NAVIGATION
+   Responsive + Optimized
+   Theme: British Racing Green + Ivory + Antique Gold + Walnut
+========================================================= */
+
+:root {
+  --heritage-green: #0b211a;
+  --heritage-green-dark: #07150f;
+  --heritage-green-light: #14382b;
+  --ivory: #f3ebdd;
+  --ivory-soft: #dcd1bd;
+  --antique-gold: #c6a15b;
+  --gold-light: #e2c47c;
+  --gold-dark: #8f713e;
+  --walnut: #3a2418;
+  --walnut-dark: #21140e;
+  --black: #080908;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background: var(--black);
+}
+
+.bottom-nav,
+.upper-nav {
+  box-sizing: border-box;
+}
+
+.bottom-nav *,
+.upper-nav * {
+  box-sizing: border-box;
+}
+
+/* =========================================================
+   UPPER NAV
+========================================================= */
+
+.upper-nav {
+  position: relative;
+  z-index: 100;
+  width: 100%;
+  min-height: 44px;
+  padding: 0 clamp(12px, 4vw, 55px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  overflow: hidden;
+  color: var(--ivory);
+  font-size: 12px;
+  letter-spacing: 0.6px;
+  background: linear-gradient(
+    90deg,
+    #07140f 0%,
+    #10251d 45%,
+    #0b1c16 70%,
+    #07140f 100%
+  );
+  border-bottom: 1px solid rgba(198, 161, 91, 0.18);
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.35);
+  animation: heritageTopReveal 0.9s cubic-bezier(.22, 1, .36, 1) both;
+}
+
+.upper-nav::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -120%;
+  width: 55%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(226, 196, 124, 0.07),
+    transparent
+  );
+  transform: skewX(-25deg);
+  animation: vintageSweep 8s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.upper-nav::after {
+  content: "";
+  position: absolute;
+  left: 5%;
+  right: 5%;
+  bottom: 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(143, 113, 62, 0.5),
+    var(--antique-gold),
+    rgba(143, 113, 62, 0.5),
+    transparent
+  );
+  box-shadow: 0 0 8px rgba(198, 161, 91, 0.3);
+  pointer-events: none;
+}
+
+.upper-nav-left,
+.upper-nav-right {
+  position: relative;
+  z-index: 2;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+}
+
+.upper-nav-left {
+  gap: 10px;
+  white-space: nowrap;
+  animation: upperLeftReveal 0.9s cubic-bezier(.22, 1, .36, 1) 0.15s both;
+}
+
+.upper-nav-left::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  flex: 0 0 6px;
+  border-radius: 50%;
+  background: var(--antique-gold);
+  box-shadow:
+    0 0 5px rgba(198, 161, 91, 0.8),
+    0 0 12px rgba(198, 161, 91, 0.3);
+  animation: heritagePulse 3s ease-in-out infinite;
+}
+
+.upper-nav-left span {
+  color: rgba(243, 235, 221, 0.72);
+  transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.upper-nav-left span:hover {
+  color: var(--ivory);
+  transform: translateY(-1px);
+}
+
+.upper-nav-right {
+  flex-shrink: 0;
+  color: var(--ivory-soft);
+  animation: upperRightReveal 0.9s cubic-bezier(.22, 1, .36, 1) 0.15s both;
+}
+
+.upper-nav-right a {
+  position: relative;
+  margin-left: 6px;
+  padding: 5px 8px;
+  color: var(--antique-gold);
+  font-weight: 600;
+  letter-spacing: 0.8px;
+  text-decoration: none;
+  transition:
+    color 0.3s ease,
+    transform 0.3s ease,
+    text-shadow 0.3s ease;
+}
+
+.upper-nav-right a::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  width: 0;
+  height: 1px;
+  background: var(--gold-light);
+  transform: translateX(-50%);
+  box-shadow: 0 0 6px rgba(198, 161, 91, 0.5);
+  transition: width 0.3s cubic-bezier(.16, 1, .3, 1);
+}
+
+.upper-nav-right a:hover {
+  color: var(--gold-light);
+  transform: translateY(-1px);
+  text-shadow: 0 0 10px rgba(198, 161, 91, 0.3);
+}
+
+.upper-nav-right a:hover::after {
+  width: 80%;
+}
+
+/* =========================================================
+   BOTTOM NAV
+========================================================= */
+
+.bottom-nav {
+  position: sticky;
+  top: 0;
+  z-index: 9999;
+  width: 100%;
+  height: 86px;
+  display: flex;
+  align-items: center;
+  overflow: visible;
+  isolation: isolate;
+  background: linear-gradient(
+    180deg,
+    #10281f 0%,
+    #0b211a 48%,
+    #071710 100%
+  );
+  box-shadow:
+    0 12px 32px rgba(0, 0, 0, 0.48),
+    inset 0 1px 0 rgba(243, 235, 221, 0.025);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  animation: bottomNavReveal 0.9s cubic-bezier(.16, 1, .3, 1) both;
+}
+
+.bottom-nav::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -80px;
+  width: min(55%, 700px);
+  height: 130px;
+  transform: translateX(-50%);
+  background: radial-gradient(
+    ellipse,
+    rgba(198, 161, 91, 0.13),
+    rgba(198, 161, 91, 0.04) 35%,
+    transparent 72%
+  );
+  filter: blur(28px);
+  pointer-events: none;
+}
+
+.bottom-nav::after {
+  content: "";
+  position: absolute;
+  left: 6%;
+  right: 6%;
+  bottom: 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(143, 113, 62, 0.45),
+    var(--antique-gold),
+    var(--gold-light),
+    var(--antique-gold),
+    rgba(143, 113, 62, 0.45),
+    transparent
+  );
+  box-shadow: 0 0 9px rgba(198, 161, 91, 0.35);
+  pointer-events: none;
+}
+
+.nav-container {
+  position: relative;
+  z-index: 3;
+  width: 100%;
+  height: 100%;
+  padding: 0 clamp(10px, 5vw, 75px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: clamp(12px, 3vw, 40px);
+}
+
+/* =========================================================
+   LOGO
+========================================================= */
+
+.nav-logo {
+  position: relative;
+  z-index: 5;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  flex: 0 0 auto;
+  animation: logoIntro 3.2s cubic-bezier(.16, 1, .3, 1) both;
+}
+
+.nav-logo img {
+  display: block;
+  width: auto;
+  height: 70px;
+  max-width: 270px;
+  object-fit: contain;
+  cursor: pointer;
+  filter:
+    drop-shadow(0 3px 5px rgba(0, 0, 0, 0.7))
+    drop-shadow(0 0 8px rgba(198, 161, 91, 0.12));
+  transition:
+    transform 0.45s cubic-bezier(.16, 1, .3, 1),
+    filter 0.45s ease;
+}
+
+.nav-logo img:hover {
+  transform: scale(1.045) translateY(-1px);
+  filter:
+    drop-shadow(0 4px 7px rgba(0, 0, 0, 0.8))
+    drop-shadow(0 0 14px rgba(198, 161, 91, 0.28));
+}
+
+/* =========================================================
+   NAV LINKS
+========================================================= */
+
+.nav-links {
+  height: 100%;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(18px, 4vw, 65px);
+}
+
+.nav-links a {
+  position: relative;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: var(--ivory);
+  text-decoration: none;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: 1.7px;
+  transition:
+    color 0.4s ease,
+    transform 0.4s cubic-bezier(.16, 1, .3, 1),
+    text-shadow 0.4s ease;
+  animation: linkHeritageReveal 0.9s cubic-bezier(.16, 1, .3, 1) both;
+}
+
+.ham1 {
+  position: relative;
+  padding: 10px 8px;
+  color: var(--ivory);
+  white-space: nowrap;
+  transition:
+    color 0.4s ease,
+    transform 0.4s cubic-bezier(.16, 1, .3, 1),
+    letter-spacing 0.4s ease;
+}
+
+.ham1::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: 2px;
+  width: 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--gold-dark),
+    var(--gold-light),
+    var(--gold-dark),
+    transparent
+  );
+  transform: translateX(-50%);
+  opacity: 0;
+  box-shadow: 0 0 7px rgba(198, 161, 91, 0.65);
+  transition:
+    width 0.45s cubic-bezier(.16, 1, .3, 1),
+    opacity 0.3s ease;
+}
+
+.ham1::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -7px;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--antique-gold);
+  transform: translateX(-50%) scale(0);
+  opacity: 0;
+  box-shadow:
+    0 0 5px rgba(198, 161, 91, 0.8),
+    0 0 12px rgba(198, 161, 91, 0.35);
+  transition:
+    transform 0.4s cubic-bezier(.16, 1, .3, 1),
+    opacity 0.3s ease;
+}
+
+.nav-links a:hover {
+  color: var(--gold-light);
+  transform: translateY(-3px);
+  text-shadow: 0 0 8px rgba(198, 161, 91, 0.28);
+}
+
+.nav-links a:hover .ham1 {
+  color: var(--gold-light);
+  letter-spacing: 2.3px;
+  transform: scale(1.03);
+}
+
+.nav-links a:hover .ham1::before {
+  width: 100%;
+  opacity: 1;
+}
+
+.nav-links a:hover .ham1::after {
+  transform: translateX(-50%) scale(1);
+  opacity: 1;
+  animation: heritageDotPulse 1.5s ease-in-out infinite;
+}
+
+.nav-links a:active {
+  transform: translateY(-1px) scale(0.97);
+}
+
+.nav-links a:nth-child(1) { animation-delay: 0.15s; }
+.nav-links a:nth-child(2) { animation-delay: 0.28s; }
+.nav-links a:nth-child(3) { animation-delay: 0.41s; }
+.nav-links a:nth-child(4) { animation-delay: 0.54s; }
+
+/* =========================================================
+   BUY TICKETS
+========================================================= */
+
+.nav-buy-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: auto !important;
+  padding: 10px 22px !important;
+  flex: 0 0 auto;
+  background: linear-gradient(
+    135deg,
+    #8f713e,
+    #c6a15b,
+    #e2c47c
+  ) !important;
+  border: 1px solid rgba(226, 196, 124, 0.6);
+  color: #07140f !important;
+  font-family: Georgia, "Times New Roman", serif !important;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  letter-spacing: 2px !important;
+  text-transform: uppercase;
+  white-space: nowrap;
+  text-decoration: none;
+  box-shadow:
+    0 4px 14px rgba(0, 0, 0, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  transition:
+    filter 0.35s ease,
+    transform 0.35s cubic-bezier(.16, 1, .3, 1),
+    box-shadow 0.35s ease !important;
+}
+
+.nav-buy-btn:hover {
+  filter: brightness(1.1);
+  transform: translateY(-2px) !important;
+  box-shadow:
+    0 8px 22px rgba(0, 0, 0, 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;
+  color: #07140f !important;
+  letter-spacing: 2.4px !important;
+}
+
+.nav-buy-btn:active {
+  transform: translateY(0) !important;
+}
+
+/* =========================================================
+   ANIMATIONS
+========================================================= */
+
+@keyframes heritageTopReveal {
+  from {
+    opacity: 0;
+    transform: translateY(-100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes upperLeftReveal {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes upperRightReveal {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes vintageSweep {
+  0% { left: -120%; }
+  30%,
+  100% { left: 140%; }
+}
+
+@keyframes heritagePulse {
+  0%,
+  100% {
+    opacity: 0.65;
+    box-shadow:
+      0 0 4px rgba(198, 161, 91, 0.6),
+      0 0 9px rgba(198, 161, 91, 0.2);
+  }
+
+  50% {
+    opacity: 1;
+    box-shadow:
+      0 0 7px rgba(198, 161, 91, 0.9),
+      0 0 16px rgba(198, 161, 91, 0.4);
+  }
+}
+
+@keyframes bottomNavReveal {
+  from {
+    opacity: 0;
+    transform: translateY(-25px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes logoIntro {
+  0%,
+  15%,
+  65% {
+    opacity: 1;
+    transform:
+      translate(
+        calc(50vw - clamp(10px, 5vw, 75px) - 50%),
+        calc(50vh - 87px)
+      )
+      scale(3.2);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translate(0, 0) scale(1);
+  }
+}
+
+@keyframes linkHeritageReveal {
+  from {
+    opacity: 0;
+    transform: translateY(-15px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes heritageDotPulse {
+  0%,
+  100% {
+    box-shadow:
+      0 0 4px rgba(198, 161, 91, 0.7),
+      0 0 9px rgba(198, 161, 91, 0.3);
+  }
+
+  50% {
+    box-shadow:
+      0 0 8px rgba(198, 161, 91, 1),
+      0 0 17px rgba(198, 161, 91, 0.5);
+  }
+}
+
+/* =========================================================
+   LOGO INTRO OVERLAY
+   Darkens the page while keeping the logo readable.
+========================================================= */
+
+.logo-intro-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9998;
+  pointer-events: none;
+
+  /* Darker around the screen, lighter around the logo center */
+  background:
+    radial-gradient(
+      ellipse at center,
+      rgba(0, 0, 0, 0.02) 0%,
+      rgba(0, 0, 0, 0.10) 18%,
+      rgba(0, 0, 0, 0.38) 42%,
+      rgba(0, 0, 0, 0.62) 100%
+    );
+
+  backdrop-filter: blur(7px);
+  -webkit-backdrop-filter: blur(7px);
+  animation: introOverlay 3.2s ease both;
+}
+
+@keyframes introOverlay {
+  0%,
+  65% {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  100% {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media (max-width: 1024px) {
+  .upper-nav {
+    min-height: 42px;
+    padding-inline: 22px;
+  }
+
+  .bottom-nav {
+    height: 76px;
+  }
+
+  .nav-container {
+    padding-inline: 20px;
+    gap: 18px;
+  }
+
+  .nav-logo img {
+    height: 60px;
+    max-width: 220px;
+  }
+
+  .nav-links {
+    gap: clamp(15px, 2.8vw, 30px);
+  }
+
+  .nav-links a {
+    font-size: 13px;
+    letter-spacing: 1.2px;
+  }
+
+  .ham1 {
+    padding: 8px 5px;
+  }
+
+  .nav-buy-btn {
+    padding: 9px 15px !important;
+    font-size: 11px !important;
+  }
+}
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 768px) {
+  .upper-nav {
+    min-height: 40px;
+    padding-inline: 14px;
+    gap: 10px;
+    font-size: 10px;
+    letter-spacing: 0.35px;
+  }
+
+  .upper-nav-left {
+    gap: 6px;
+    max-width: 65%;
+    overflow: hidden;
+  }
+
+  .upper-nav-left span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .upper-nav-left::before {
+    width: 5px;
+    height: 5px;
+    flex-basis: 5px;
+  }
+
+  .upper-nav-right {
+    flex-shrink: 0;
+  }
+
+  .upper-nav-right a {
+    margin-left: 2px;
+    padding: 4px;
+    letter-spacing: 0.3px;
+  }
+
+  .bottom-nav {
+    height: 70px;
+  }
+
+  .nav-container {
+    padding-inline: 12px;
+    gap: 8px;
+  }
+
+  .nav-logo img {
+    height: 52px;
+    max-width: 155px;
+  }
+
+  .nav-links {
+    flex: 1 1 auto;
+    min-width: 0;
+    gap: 0;
+    justify-content: space-evenly;
+  }
+
+  .nav-links a {
+    font-size: 10px;
+    letter-spacing: 0.6px;
+  }
+
+  .ham1 {
+    padding: 7px 3px;
+  }
+
+  .nav-buy-btn {
+    padding: 8px 11px !important;
+    font-size: 9px !important;
+    letter-spacing: 1px !important;
+  }
+
+  @keyframes logoIntro {
+    0%,
+    15%,
+    65% {
+      transform:
+        translate(
+          calc(50vw - 50%),
+          calc(50vh - 50px)
+        )
+        scale(2.5);
+    }
+
+    100% {
+      transform: translate(0, 0) scale(1);
+    }
+  }
+}
+
+/* =========================================================
+   SMALL MOBILE
+========================================================= */
+
+@media (max-width: 600px) {
+  .upper-nav {
+    min-height: 38px;
+    padding-inline: 10px;
+    font-size: 9px;
+    letter-spacing: 0.2px;
+  }
+
+  .upper-nav-left {
+    max-width: 58%;
+  }
+
+  .upper-nav-right a {
+    padding: 3px;
+  }
+
+  .bottom-nav {
+    height: 64px;
+  }
+
+  .nav-container {
+    padding-inline: 7px;
+    gap: 4px;
+  }
+
+  .nav-logo img {
+    height: 46px;
+    max-width: 125px;
+  }
+
+  .nav-links {
+    margin-left: 2px;
+  }
+
+  .nav-links a {
+    font-size: 8.5px;
+    letter-spacing: 0.35px;
+  }
+
+  .ham1 {
+    padding: 6px 2px;
+  }
+
+  .nav-buy-btn {
+    padding: 7px 8px !important;
+    font-size: 8px !important;
+    letter-spacing: 0.8px !important;
+  }
+
+  .nav-links a:hover .ham1 {
+    letter-spacing: 0.8px;
+  }
+}
+
+/* =========================================================
+   VERY SMALL PHONES
+========================================================= */
+
+@media (max-width: 420px) {
+  .upper-nav {
+    padding-inline: 8px;
+    font-size: 8px;
+  }
+
+  .upper-nav-left {
+    max-width: 52%;
+  }
+
+  .upper-nav-left::before {
+    display: none;
+  }
+
+  .upper-nav-right a {
+    padding: 3px 2px;
+  }
+
+  .bottom-nav {
+    height: 60px;
+  }
+
+  .nav-container {
+    padding-inline: 5px;
+    gap: 2px;
+  }
+
+  .nav-logo img {
+    height: 40px;
+    max-width: 100px;
+  }
+
+  .nav-links {
+    margin-left: 0;
+  }
+
+  .nav-links a {
+    font-size: 7.5px;
+    letter-spacing: 0.15px;
+  }
+
+  .ham1 {
+    padding: 5px 1px;
+  }
+
+  .nav-buy-btn {
+    padding: 6px 6px !important;
+    font-size: 7px !important;
+    letter-spacing: 0.5px !important;
+  }
+
+  .ham1::after {
+    width: 3px;
+    height: 3px;
+  }
+
+  @keyframes logoIntro {
+    0%,
+    15%,
+    65% {
+      transform:
+        translate(
+          calc(50vw - 50%),
+          calc(50vh - 45px)
+        )
+        scale(2.2);
+    }
+
+    100% {
+      transform: translate(0, 0) scale(1);
+    }
+  }
+}
+
+/* =========================================================
+   LANDSCAPE MOBILE
+========================================================= */
+
+@media (max-width: 768px) and (orientation: landscape) {
+  .bottom-nav {
+    height: 58px;
+  }
+
+  .nav-logo img {
+    height: 42px;
+  }
+
+  .nav-links a {
+    font-size: 9px;
+  }
+}
+
+/* =========================================================
+   ACCESSIBILITY
+========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .upper-nav,
+  .upper-nav::before,
+  .upper-nav::after,
+  .upper-nav-left,
+  .upper-nav-right,
+  .upper-nav-left::before,
+  .bottom-nav,
+  .nav-logo,
+  .nav-links a,
+  .logo-intro-overlay,
+  .ham1::after {
+    animation: none !important;
+  }
+
+  .nav-logo {
+    transform: none !important;
+  }
+}

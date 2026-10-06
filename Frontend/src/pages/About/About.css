@@ -1,0 +1,990 @@
+@import url("https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Montserrat:wght@300;400;500;600&display=swap");
+
+
+/* =========================================================
+   BASIC
+========================================================= */
+
+.about-page {
+  --black: #000000;
+  --cream: #f5efdf;
+  --light-cream: #fbf8ef;
+  --gold: #d4af69;
+  --gold-dark: #a87932;
+  --text: #292929;
+
+  width: 100%;
+  min-height: 100vh;
+
+  background: var(--cream);
+  color: var(--text);
+
+  font-family: "Montserrat", sans-serif;
+
+  overflow-x: hidden;
+}
+
+
+.about-page *,
+.about-page *::before,
+.about-page *::after {
+  box-sizing: border-box;
+}
+
+
+.about-container {
+  width: min(1180px, 90%);
+  margin: 0 auto;
+}
+
+
+.about-page img {
+  display: block;
+  max-width: 100%;
+}
+
+
+/* =========================================================
+   TOP BAR
+========================================================= */
+
+.about-topbar {
+  width: 100%;
+
+  background: #000000;
+
+  color: #ffffff;
+
+  border-bottom: 1px solid rgba(212, 175, 105, 0.35);
+
+  font-size: 11px;
+
+  letter-spacing: 0.8px;
+}
+
+
+.about-topbar-inner {
+  min-height: 42px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 20px;
+}
+
+
+.about-topbar a {
+  color: var(--gold);
+
+  text-decoration: none;
+
+  transition: 0.3s ease;
+}
+
+
+.about-topbar a:hover {
+  color: #ffffff;
+}
+
+
+.top-divider {
+  color: var(--gold);
+
+  margin: 0 10px;
+}
+
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.about-header {
+  width: 100%;
+
+  background: #000000;
+
+  border-bottom: 1px solid rgba(212, 175, 105, 0.35);
+}
+
+
+.about-header-inner {
+  min-height: 105px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 40px;
+}
+
+
+.about-logo {
+  width: 210px;
+
+  display: block;
+}
+
+
+.about-logo img {
+  width: 100%;
+
+  height: auto;
+}
+
+
+.about-nav {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: flex-end;
+
+  gap: 28px;
+}
+
+
+.about-nav a {
+  position: relative;
+
+  padding: 12px 0;
+
+  color: #ffffff;
+
+  text-decoration: none;
+
+  font-size: 10px;
+
+  font-weight: 500;
+
+  letter-spacing: 1.5px;
+
+  transition: color 0.3s ease;
+}
+
+
+.about-nav a:hover {
+  color: var(--gold);
+}
+
+
+.about-nav a.active {
+  color: var(--gold);
+}
+
+
+.about-nav a.active::after {
+  content: "";
+
+  position: absolute;
+
+  left: 0;
+
+  bottom: 3px;
+
+  width: 100%;
+
+  height: 1px;
+
+  background: var(--gold);
+}
+
+
+.about-nav .ticket-link {
+  padding: 12px 17px;
+
+  border: 1px solid var(--gold);
+
+  color: var(--gold);
+}
+
+
+.about-nav .ticket-link:hover {
+  background: var(--gold);
+
+  color: #000000;
+}
+
+
+/* =========================================================
+   HERO IMAGE
+   IMPORTANT:
+   THERE IS NO "DAUER CLASSIC CARS" TEXT HERE.
+========================================================= */
+
+.about-page-hero {
+  width: 100%;
+
+  min-height: 430px;
+
+  background-image: url("https://dauercars.com/wp-content/uploads/2021/04/Dauer-Classic-Car-Museum-South-Florida-2.jpg");
+
+  background-size: cover;
+
+  background-position: center;
+
+  background-repeat: no-repeat;
+}
+
+
+/* =========================================================
+   SECTION NUMBER
+========================================================= */
+
+.section-number {
+  display: inline-block;
+
+  color: var(--gold);
+
+  font-size: 11px;
+
+  font-weight: 600;
+
+  letter-spacing: 3px;
+}
+
+
+/* =========================================================
+   INTRODUCTION
+========================================================= */
+
+.about-intro-section {
+  background: var(--light-cream);
+
+  padding: 120px 0;
+}
+
+
+.about-intro-grid {
+  display: grid;
+
+  grid-template-columns: 0.8fr 1.2fr;
+
+  gap: 100px;
+
+  align-items: start;
+}
+
+
+.intro-heading h2,
+.story-content h2,
+.time-machine-heading h2,
+.video-heading h2 {
+  margin: 20px 0 0;
+
+  color: #000000;
+
+  font-family: "Cormorant Garamond", serif;
+
+  font-size: clamp(55px, 6vw, 78px);
+
+  font-weight: 500;
+
+  line-height: 0.88;
+}
+
+
+.intro-heading h2 span,
+.story-content h2 span {
+  color: var(--gold-dark);
+}
+
+
+.intro-text {
+  padding-top: 15px;
+}
+
+
+.intro-text p,
+.story-content p,
+.time-machine-content p {
+  margin: 0 0 28px;
+
+  font-size: 14px;
+
+  line-height: 2;
+}
+
+
+.gold-quote {
+  margin: 40px 0;
+
+  padding: 8px 0 8px 28px;
+
+  border-left: 2px solid var(--gold);
+
+  color: #000000;
+
+  font-family: "Cormorant Garamond", serif;
+
+  font-size: 29px;
+
+  font-style: italic;
+
+  line-height: 1.2;
+}
+
+
+/* =========================================================
+   IMAGE SHOWCASE
+========================================================= */
+
+.about-image-showcase {
+  background: #000000;
+
+  padding: 80px 0;
+}
+
+
+.image-showcase-grid {
+  display: grid;
+
+  grid-template-columns: 1.4fr 0.8fr;
+
+  grid-template-rows: 260px 260px;
+
+  gap: 18px;
+}
+
+
+.large-image {
+  grid-row: 1 / 3;
+
+  overflow: hidden;
+}
+
+
+.small-image {
+  overflow: hidden;
+}
+
+
+.about-image-showcase img {
+  width: 100%;
+
+  height: 100%;
+
+  object-fit: cover;
+
+  transition: transform 0.7s ease;
+}
+
+
+/* Clear and bright second image */
+
+.image-showcase-grid .small-image:nth-child(2) img {
+  filter: brightness(1.3) contrast(1.08) saturate(1.08);
+
+  opacity: 1;
+}
+
+
+.about-image-showcase img:hover {
+  transform: scale(1.04);
+}
+
+
+/* =========================================================
+   STORY
+========================================================= */
+
+.about-story-section {
+  background: var(--cream);
+
+  padding: 130px 0;
+}
+
+
+.story-grid {
+  display: grid;
+
+  grid-template-columns: 1fr 1fr;
+
+  gap: 90px;
+
+  align-items: center;
+}
+
+
+.story-image {
+  position: relative;
+}
+
+
+.story-image img {
+  position: relative;
+
+  z-index: 1;
+
+  width: 100%;
+
+  height: 620px;
+
+  object-fit: cover;
+}
+
+
+.story-content {
+  padding-right: 20px;
+}
+
+
+.story-content h2 span {
+  color: var(--gold-dark);
+}
+
+
+.bold-message {
+  color: #000000 !important;
+
+  font-family: "Cormorant Garamond", serif;
+
+  font-size: 25px !important;
+
+  font-weight: 600;
+
+  line-height: 1.4 !important;
+}
+
+
+/* =========================================================
+   FEATURE IMAGE
+========================================================= */
+
+.single-feature-image {
+  width: 100%;
+
+  height: 580px;
+
+  overflow: hidden;
+}
+
+
+.single-feature-image img {
+  width: 100%;
+
+  height: 100%;
+
+  object-fit: cover;
+
+  object-position: center;
+}
+
+
+/* =========================================================
+   TIME MACHINE
+========================================================= */
+
+.time-machine-section {
+  background: #000000;
+
+  color: #ffffff;
+
+  padding: 130px 0;
+}
+
+
+.time-machine-heading {
+  max-width: 900px;
+
+  margin: 0 auto 80px;
+
+  text-align: center;
+}
+
+
+.time-machine-heading h2 {
+  color: #ffffff;
+}
+
+
+.time-machine-heading h2 span {
+  color: var(--gold);
+}
+
+
+.gold-line {
+  width: 75px;
+
+  height: 2px;
+
+  margin: 30px auto;
+
+  background: var(--gold);
+}
+
+
+.time-machine-heading h3 {
+  max-width: 760px;
+
+  margin: 30px auto 0;
+
+  color: #ffffff;
+
+  font-family: "Cormorant Garamond", serif;
+
+  font-size: 30px;
+
+  font-weight: 400;
+
+  line-height: 1.3;
+}
+
+
+.time-machine-content {
+  max-width: 900px;
+
+  margin: 0 auto;
+}
+
+
+.time-machine-content p {
+  color: #f2f2f2;
+}
+
+
+/* =========================================================
+   YOUTUBE VIDEOS
+========================================================= */
+
+.video-section {
+  background: #000000;
+
+  color: #ffffff;
+
+  padding: 110px 0;
+
+  border-top: 1px solid rgba(212, 175, 105, 0.25);
+}
+
+
+.video-heading {
+  margin-bottom: 60px;
+
+  text-align: center;
+}
+
+
+.video-heading h2 {
+  color: #ffffff;
+}
+
+
+.video-heading h2 span {
+  color: var(--gold);
+}
+
+
+.video-grid {
+  display: grid;
+
+  grid-template-columns: 1fr 1fr;
+
+  gap: 25px;
+}
+
+
+.youtube-video {
+  position: relative;
+
+  width: 100%;
+
+  aspect-ratio: 16 / 9;
+
+  overflow: hidden;
+
+  background: #111111;
+
+  border: 1px solid rgba(212, 175, 105, 0.35);
+}
+
+
+.youtube-video iframe {
+  display: block;
+
+  width: 100%;
+
+  height: 100%;
+
+  border: 0;
+}
+
+
+/* =========================================================
+   FINAL GALLERY
+========================================================= */
+
+.final-gallery {
+  background: var(--light-cream);
+
+  padding: 110px 0;
+}
+
+
+.final-gallery-grid {
+  display: grid;
+
+  grid-template-columns: 1.4fr 1fr;
+
+  grid-template-rows: 300px 300px;
+
+  gap: 20px;
+}
+
+
+.gallery-card {
+  position: relative;
+
+  overflow: hidden;
+}
+
+
+.gallery-card.wide {
+  grid-row: 1 / 3;
+}
+
+
+.gallery-card img {
+  width: 100%;
+
+  height: 100%;
+
+  object-fit: cover;
+
+  transition: transform 0.7s ease;
+}
+
+
+.gallery-card:hover img {
+  transform: scale(1.06);
+}
+
+
+.gallery-label {
+  position: absolute;
+
+  left: 25px;
+
+  bottom: 25px;
+
+  z-index: 2;
+
+  color: #ffffff;
+
+  font-size: 10px;
+
+  letter-spacing: 2px;
+}
+
+
+/* =========================================================
+   FINAL QUOTE
+========================================================= */
+
+.about-final-quote {
+  background: #000000;
+
+  color: #ffffff;
+
+  padding: 130px 20px;
+
+  text-align: center;
+}
+
+
+.quote-symbol {
+  color: var(--gold);
+
+  font-family: "Cormorant Garamond", serif;
+
+  font-size: 100px;
+
+  line-height: 0.5;
+}
+
+
+.about-final-quote h2 {
+  max-width: 900px;
+
+  margin: 30px auto;
+
+  color: #ffffff;
+
+  font-family: "Cormorant Garamond", serif;
+
+  font-size: clamp(38px, 5vw, 65px);
+
+  font-weight: 400;
+
+  line-height: 1.05;
+}
+
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+.about-footer {
+  background: #000000;
+
+  color: #bdbdbd;
+
+  padding: 35px 20px;
+
+  font-size: 10px;
+
+  letter-spacing: 0.5px;
+
+  text-align: center;
+
+  border-top: 1px solid rgba(212, 175, 105, 0.25);
+}
+
+
+.about-footer p {
+  margin: 0;
+}
+
+
+.about-footer a {
+  color: var(--gold);
+
+  text-decoration: none;
+}
+
+
+.about-footer a:hover {
+  color: #ffffff;
+}
+
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media (max-width: 900px) {
+
+  .about-header-inner {
+    flex-direction: column;
+
+    padding: 25px 0;
+  }
+
+
+  .about-nav {
+    flex-wrap: wrap;
+
+    justify-content: center;
+
+    gap: 18px;
+  }
+
+
+  .about-intro-grid {
+    grid-template-columns: 1fr;
+
+    gap: 50px;
+  }
+
+
+  .story-grid {
+    grid-template-columns: 1fr;
+
+    gap: 60px;
+  }
+
+
+  .story-image img {
+    height: 500px;
+  }
+
+
+  .image-showcase-grid {
+    grid-template-columns: 1fr 1fr;
+
+    grid-template-rows: 350px 220px;
+  }
+
+
+  .large-image {
+    grid-column: 1 / 3;
+
+    grid-row: auto;
+  }
+
+
+  .video-grid {
+    grid-template-columns: 1fr;
+  }
+
+
+  .final-gallery-grid {
+    grid-template-columns: 1fr 1fr;
+
+    grid-template-rows: 350px 250px;
+  }
+
+
+  .gallery-card.wide {
+    grid-column: 1 / 3;
+
+    grid-row: auto;
+  }
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 600px) {
+
+  .about-topbar-inner {
+    flex-direction: column;
+
+    justify-content: center;
+
+    padding: 12px 0;
+
+    gap: 7px;
+
+    text-align: center;
+  }
+
+
+  .top-divider {
+    margin: 0 5px;
+  }
+
+
+  .about-logo {
+    width: 180px;
+  }
+
+
+  .about-nav {
+    gap: 13px;
+
+    justify-content: center;
+  }
+
+
+  .about-nav a {
+    font-size: 9px;
+  }
+
+
+  .about-nav .ticket-link {
+    padding: 10px 13px;
+  }
+
+
+  /* Clean hero image */
+
+  .about-page-hero {
+    min-height: 330px;
+
+    background-position: center;
+  }
+
+
+  .about-intro-section,
+  .about-story-section,
+  .time-machine-section,
+  .video-section {
+    padding: 80px 0;
+  }
+
+
+  .intro-heading h2,
+  .story-content h2,
+  .time-machine-heading h2,
+  .video-heading h2 {
+    font-size: 52px;
+  }
+
+
+  .gold-quote {
+    font-size: 25px;
+
+    padding-left: 20px;
+  }
+
+
+  .image-showcase-grid {
+    display: grid;
+
+    grid-template-columns: 1fr;
+
+    grid-template-rows: 300px 220px 220px;
+  }
+
+
+  .large-image {
+    grid-column: auto;
+
+    grid-row: auto;
+  }
+
+
+  .story-image img {
+    height: 400px;
+  }
+
+
+  .single-feature-image {
+    height: 400px;
+  }
+
+
+  .time-machine-heading h3 {
+    font-size: 25px;
+  }
+
+
+  .video-grid {
+    grid-template-columns: 1fr;
+
+    gap: 20px;
+  }
+
+
+  .final-gallery {
+    padding: 80px 0;
+  }
+
+
+  .final-gallery-grid {
+    display: grid;
+
+    grid-template-columns: 1fr;
+
+    grid-template-rows: 300px 250px 250px;
+  }
+
+
+  .gallery-card.wide {
+    grid-column: auto;
+
+    grid-row: auto;
+  }
+
+
+  .about-final-quote {
+    padding: 90px 20px;
+  }
+
+
+  .quote-symbol {
+    font-size: 80px;
+  }
+
+
+  .about-final-quote h2 {
+    font-size: 40px;
+  }
+}

@@ -1,0 +1,99 @@
+/* =========================
+   FOOTER
+========================= */
+
+.site-footer {
+  width: 100%;
+
+  background: #0a0a0a;
+  color: #ffffff;
+
+  padding: 0 40px;
+}
+
+
+/* GOLD TOP LINE */
+
+.footer-line {
+  width: 100%;
+  height: 1px;
+
+  background: linear-gradient(
+    to right,
+    transparent,
+    #d4af37,
+    transparent
+  );
+}
+
+
+/* CONTENT */
+
+.footer-content {
+  min-height: 75px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  text-align: center;
+}
+
+.footer-content p {
+  margin: 0;
+
+  color: #8f8f8f;
+
+  font-size: 13px;
+  font-weight: 400;
+
+  letter-spacing: 0.4px;
+}
+
+
+/* DIVIDER */
+
+.footer-divider {
+  margin: 0 12px;
+
+  color: #d4af37;
+}
+
+
+/* POWERED TEXT */
+
+.powered-text {
+  color: #b8b8b8;
+
+  transition: color 0.3s ease;
+}
+
+.powered-text:hover {
+  color: #d4af37;
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 600px) {
+
+  .site-footer {
+    padding: 0 20px;
+  }
+
+  .footer-content {
+    min-height: 90px;
+  }
+
+  .footer-content p {
+    font-size: 11px;
+
+    line-height: 1.8;
+  }
+
+  .footer-divider {
+    margin: 0 7px;
+  }
+}
