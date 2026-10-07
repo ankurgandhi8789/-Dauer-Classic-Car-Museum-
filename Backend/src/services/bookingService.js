@@ -1,34 +1,27 @@
 const { v4: uuidv4 } = require("uuid");
 const { TICKET_TYPES, MUSEUM_CONFIG } = require("../config/ticketConfig");
-const { bookings, bookingsByToken, payments } = require("../config/store");
+const { payments } = require("../config/store"); // payments are not connected yet, kept in memory
+const Booking = require("../models/Booking");
 
 // ─── REFERENCE GENERATION ─────────────────────────────────────────────────────
 
 function generateBookingReference() {
   const year = new Date().getFullYear();
-  // Random 6-char alphanumeric — not sequential, does not expose record count
   const rand = Math.random().toString(36).slice(2, 8).toUpperCase();
   return `DCA-${year}-${rand}`;
-}
-
-function generateQrToken() {
-  // Secure UUID — only this token goes in the QR code, never customer PII
-  return uuidv4();
 }
 
 // ─── DATE VALIDATION ──────────────────────────────────────────────────────────
 
 function isMuseumOpen(dateStr) {
-  const date = new Date(dateStr + "T12:00:00");
-  const day = date.getDay(); // 0=Sun … 6=Sat
+  const day = new Date(dateStr + "T12:00:00").getDay(); // 0=Sun … 6=Sat
   return MUSEUM_CONFIG.openDays.includes(day);
 }
 
 function isDateInPast(dateStr) {
   const today = new Date();
   today.setHours(0, 0, 0, 0);
-  const visit = new Date(dateStr + "T00:00:00");
-  return visit < today;
+  return new Date(dateStr + "T00:00:00") < today;
 }
 
 // ─── PRICE CALCULATION (server-side, never trust frontend) ────────────────────
@@ -56,7 +49,6 @@ function calculateOrderTotal(items) {
     subtotal += lineSubtotal;
 
     lineItems.push({
-      id: uuidv4(),
       ticketTypeId: ticketType.id,
       ticketName: ticketType.name,
       tourType: ticketType.tourType,
@@ -71,133 +63,107 @@ function calculateOrderTotal(items) {
 }
 
 // ─── BOOKING CREATION ─────────────────────────────────────────────────────────
+// Payment is not connected yet: a new booking is saved as "confirmed" with
+// paymentStatus "pending". When payment is added, create it as bookingStatus "pending"
+// and let confirmBookingPayment() confirm it.
 
-function createBooking({ customer, visitDate, visitTime, items }) {
-  // Validate date
+async function createBooking({ customer, visitDate, visitTime, items }) {
   if (isDateInPast(visitDate)) throw new Error("Visit date cannot be in the past.");
   if (!isMuseumOpen(visitDate)) throw new Error("The museum is closed on that day. We are open Monday–Saturday.");
   if (!MUSEUM_CONFIG.timeSlots.includes(visitTime)) throw new Error("Invalid visit time slot.");
 
-  // Validate at least one ticket
   const nonZero = items.filter((i) => parseInt(i.quantity, 10) > 0);
   if (nonZero.length === 0) throw new Error("Please select at least one ticket.");
 
-  // Server-side price calculation
   const { lineItems, subtotal, total } = calculateOrderTotal(items);
   if (lineItems.length === 0) throw new Error("Please select at least one ticket.");
 
-  const bookingReference = generateBookingReference();
-  const qrToken = generateQrToken();
-  const now = new Date().toISOString();
-
-  const booking = {
-    id: uuidv4(),
-    bookingReference,
-    qrToken,
-    // Customer
+  const data = {
+    qrToken: uuidv4(),
     firstName: customer.firstName.trim(),
     lastName: customer.lastName.trim(),
     email: customer.email.trim().toLowerCase(),
     phone: customer.phone.trim(),
-    notes: (customer.notes || "").trim(),
-    // Visit
+    notes: String(customer.notes || "").trim().slice(0, 500),
     visitDate,
     visitTime,
-    // Items
     items: lineItems,
-    // Pricing
     subtotal,
     total,
     currency: "USD",
-    // Status
     paymentStatus: "pending",
-    bookingStatus: "pending",
-    // Timestamps
-    createdAt: now,
-    updatedAt: now,
+    bookingStatus: "confirmed",
   };
 
-  bookings.set(bookingReference, booking);
-  bookingsByToken.set(qrToken, bookingReference);
-
-  return booking;
+  // Retry if the random reference happens to already exist.
+  for (let attempt = 0; attempt < 5; attempt++) {
+    try {
+      const doc = await Booking.create({ ...data, bookingReference: generateBookingReference() });
+      return doc.toObject();
+    } catch (err) {
+      if (err.code === 11000 && err.keyPattern && err.keyPattern.bookingReference) continue;
+      throw err;
+    }
+  }
+  throw new Error("Could not create a booking reference. Please try again.");
 }
 
-// ─── PAYMENT CONFIRMATION ─────────────────────────────────────────────────────
+// ─── PAYMENT CONFIRMATION (not used by the frontend yet) ──────────────────────
 
-function confirmBookingPayment(bookingReference, transactionId, paymentProvider) {
-  const booking = bookings.get(bookingReference);
+async function confirmBookingPayment(bookingReference, transactionId, paymentProvider) {
+  const booking = await Booking.findOne({ bookingReference });
   if (!booking) throw new Error("Booking not found.");
   if (booking.paymentStatus === "paid") throw new Error("Booking already paid — duplicate payment prevented.");
 
-  const now = new Date().toISOString();
-
-  // Record payment
   payments.set(bookingReference, {
-    id: uuidv4(),
-    bookingId: booking.id,
+    bookingId: String(booking._id),
     bookingReference,
     provider: paymentProvider || "mock",
     transactionId,
     amount: booking.total,
     currency: "USD",
     status: "paid",
-    createdAt: now,
+    createdAt: new Date().toISOString(),
   });
 
-  // Update booking status
   booking.paymentStatus = "paid";
   booking.bookingStatus = "confirmed";
-  booking.updatedAt = now;
-  bookings.set(bookingReference, booking);
-
-  return booking;
+  await booking.save();
+  return booking.toObject();
 }
 
-function failBookingPayment(bookingReference, reason) {
-  const booking = bookings.get(bookingReference);
-  if (!booking) return;
-  booking.paymentStatus = "failed";
-  booking.updatedAt = new Date().toISOString();
-  bookings.set(bookingReference, booking);
+async function failBookingPayment(bookingReference) {
+  await Booking.updateOne({ bookingReference }, { $set: { paymentStatus: "failed" } });
 }
 
 // ─── LOOKUP ───────────────────────────────────────────────────────────────────
 
-function getBookingByReference(ref) {
-  return bookings.get(ref) || null;
+async function getBookingByReference(ref) {
+  return Booking.findOne({ bookingReference: String(ref) }).lean();
 }
 
-function getBookingByToken(token) {
-  const ref = bookingsByToken.get(token);
-  if (!ref) return null;
-  return bookings.get(ref) || null;
+async function getBookingByToken(token) {
+  return Booking.findOne({ qrToken: String(token) }).lean();
 }
 
 // ─── CHECK-IN / TICKET VALIDATION ────────────────────────────────────────────
 
-function validateAndCheckin(token) {
-  const booking = getBookingByToken(token);
+async function validateAndCheckin(token) {
+  const booking = await getBookingByToken(token);
 
   if (!booking) return { valid: false, code: "INVALID_TICKET", message: "INVALID TICKET" };
   if (booking.paymentStatus !== "paid") return { valid: false, code: "PAYMENT_PENDING", message: "PAYMENT NOT CONFIRMED" };
   if (booking.bookingStatus === "used") return { valid: false, code: "ALREADY_USED", message: "ALREADY USED" };
   if (booking.bookingStatus === "cancelled") return { valid: false, code: "CANCELLED", message: "BOOKING CANCELLED" };
 
-  // Check visit date
   const today = new Date().toISOString().split("T")[0];
   if (booking.visitDate !== today) {
-    return {
-      valid: false,
-      code: "WRONG_DATE",
-      message: `TICKET NOT VALID FOR TODAY — Valid for ${booking.visitDate}`,
-    };
+    return { valid: false, code: "WRONG_DATE", message: `TICKET NOT VALID FOR TODAY — Valid for ${booking.visitDate}` };
   }
 
-  // Mark as used
-  booking.bookingStatus = "used";
-  booking.updatedAt = new Date().toISOString();
-  bookings.set(booking.bookingReference, booking);
+  // Atomic update so two scans at the same time cannot both succeed.
+  const res = await Booking.updateOne({ _id: booking._id, bookingStatus: { $ne: "used" } }, { $set: { bookingStatus: "used" } });
+  if (!res.modifiedCount) return { valid: false, code: "ALREADY_USED", message: "ALREADY USED" };
 
   return {
     valid: true,

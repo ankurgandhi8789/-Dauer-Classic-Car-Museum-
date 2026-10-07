@@ -13,13 +13,13 @@ const { processPayment } = require("../services/paymentService");
 const { sendBookingConfirmation } = require("../services/emailService");
 
 // ─── POST /api/bookings/create ────────────────────────────────────────────────
-// Creates a PENDING booking. Does NOT confirm until payment succeeds.
+// Saves the booking in MongoDB. It shows up in the admin dashboard right away.
+// (Payment is not connected yet, so the booking is saved as confirmed / payment pending.)
 router.post("/create", validateBookingInput, async (req, res) => {
   try {
     const { customer, visitDate, visitTime, items } = req.body;
-    const booking = createBooking({ customer, visitDate, visitTime, items });
+    const booking = await createBooking({ customer, visitDate, visitTime, items });
 
-    // Return only what the frontend needs for the payment step
     res.status(201).json({
       bookingReference: booking.bookingReference,
       total: booking.total,
@@ -31,33 +31,36 @@ router.post("/create", validateBookingInput, async (req, res) => {
       bookingStatus: booking.bookingStatus,
     });
   } catch (err) {
+    // Validation problems from createBooking() are safe to show. Database errors are not.
+    if (err.name === "MongoServerError" || err.name === "MongooseError" || err.name === "ValidationError") {
+      console.error(err);
+      return res.status(500).json({ error: "We could not save your booking. Please try again." });
+    }
     res.status(400).json({ error: err.message });
   }
 });
 
 // ─── POST /api/bookings/payment ───────────────────────────────────────────────
-// Processes payment for a pending booking.
-// Booking only becomes CONFIRMED after successful payment.
+// NOT used by the website yet. Kept for when payment is connected.
 router.post("/payment", validatePaymentInput, async (req, res) => {
   const { bookingReference, paymentDetails } = req.body;
 
-  const booking = getBookingByReference(bookingReference);
-  if (!booking) return res.status(404).json({ error: "Booking not found." });
-  if (booking.paymentStatus === "paid") {
-    return res.status(409).json({ error: "This booking has already been paid. Duplicate payment prevented." });
-  }
-
   try {
+    const booking = await getBookingByReference(bookingReference);
+    if (!booking) return res.status(404).json({ error: "Booking not found." });
+    if (booking.paymentStatus === "paid") {
+      return res.status(409).json({ error: "This booking has already been paid. Duplicate payment prevented." });
+    }
+
     const result = await processPayment(bookingReference, booking.total, paymentDetails);
 
     if (!result.success) {
-      failBookingPayment(bookingReference, result.error);
+      await failBookingPayment(bookingReference);
       return res.status(402).json({ error: result.error || "Payment failed. Please try again." });
     }
 
-    const confirmed = confirmBookingPayment(bookingReference, result.transactionId, result.provider);
+    const confirmed = await confirmBookingPayment(bookingReference, result.transactionId, result.provider);
 
-    // Attempt email — does not fail the request if email is not configured
     const emailResult = await sendBookingConfirmation(confirmed).catch(() => ({
       sent: false,
       reason: "Email service error.",
@@ -74,43 +77,46 @@ router.post("/payment", validatePaymentInput, async (req, res) => {
       emailNote: emailResult.sent ? null : emailResult.reason,
     });
   } catch (err) {
-    failBookingPayment(bookingReference, err.message);
+    console.error(err);
+    await failBookingPayment(bookingReference).catch(() => {});
     res.status(500).json({ error: "Payment processing error. Please try again." });
   }
 });
 
 // ─── GET /api/bookings/:reference ─────────────────────────────────────────────
-// Retrieve a confirmed booking by reference number (for confirmation page).
-router.get("/:reference", (req, res) => {
-  const booking = getBookingByReference(req.params.reference);
-  if (!booking) return res.status(404).json({ error: "Booking not found." });
+router.get("/:reference", async (req, res, next) => {
+  try {
+    const booking = await getBookingByReference(req.params.reference);
+    if (!booking) return res.status(404).json({ error: "Booking not found." });
 
-  // Never expose qrToken in the general lookup — only return it after payment
-  const { qrToken, ...safeBooking } = booking;
-  res.json(safeBooking);
+    // Never expose qrToken or internal fields in the general lookup.
+    const { qrToken, _id, __v, isDemo, ...safeBooking } = booking;
+    res.json(safeBooking);
+  } catch (err) { next(err); }
 });
 
 // ─── GET /api/bookings/verify/:token ──────────────────────────────────────────
-// Staff check-in: verify a booking by QR token (read-only, does not mark as used).
-router.get("/verify/:token", (req, res) => {
-  const booking = getBookingByToken(req.params.token);
-  if (!booking) return res.status(404).json({ valid: false, code: "INVALID_TICKET", message: "INVALID TICKET" });
+router.get("/verify/:token", async (req, res, next) => {
+  try {
+    const booking = await getBookingByToken(req.params.token);
+    if (!booking) return res.status(404).json({ valid: false, code: "INVALID_TICKET", message: "INVALID TICKET" });
 
-  res.json({
-    valid: booking.paymentStatus === "paid" && booking.bookingStatus === "confirmed",
-    bookingReference: booking.bookingReference,
-    visitDate: booking.visitDate,
-    paymentStatus: booking.paymentStatus,
-    bookingStatus: booking.bookingStatus,
-  });
+    res.json({
+      valid: booking.paymentStatus === "paid" && booking.bookingStatus === "confirmed",
+      bookingReference: booking.bookingReference,
+      visitDate: booking.visitDate,
+      paymentStatus: booking.paymentStatus,
+      bookingStatus: booking.bookingStatus,
+    });
+  } catch (err) { next(err); }
 });
 
 // ─── POST /api/bookings/checkin/:token ────────────────────────────────────────
-// Staff check-in: validate and mark ticket as used. Prevents double-scan.
-router.post("/checkin/:token", (req, res) => {
-  const result = validateAndCheckin(req.params.token);
-  const status = result.valid ? 200 : 400;
-  res.status(status).json(result);
+router.post("/checkin/:token", async (req, res, next) => {
+  try {
+    const result = await validateAndCheckin(req.params.token);
+    res.status(result.valid ? 200 : 400).json(result);
+  } catch (err) { next(err); }
 });
 
 module.exports = router;

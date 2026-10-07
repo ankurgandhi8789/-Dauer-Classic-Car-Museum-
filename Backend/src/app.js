@@ -3,6 +3,7 @@ const cors = require("cors");
 
 const ticketsRouter = require("./routes/tickets");
 const bookingsRouter = require("./routes/bookings");
+const adminRouter = require("./routes/admin");               // NEW
 
 const app = express();
 
@@ -11,6 +12,10 @@ app.use(express.json());
 
 app.use("/api/tickets", ticketsRouter);
 app.use("/api/bookings", bookingsRouter);
+app.use("/api/admin", adminRouter);                          // NEW
+
+// DEV ONLY: demo bookings for the admin dashboard. Remove before going live.
+if (process.env.SEED_DEMO === "true") require("./config/seedDemo")();   // NEW
 
 // Health check
 app.get("/api/health", (req, res) => res.json({ status: "ok" }));

@@ -1,5 +1,8 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import "./Tickets.css";
+
+// Backend URL (Frontend/.env -> VITE_API_URL)
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
 
 // image: apni ticket image ka path yaha daalo (jaise "/images/ticket-adult.png").
 // Khali ("") rahegi to automatic ticket-style placeholder dikhega.
@@ -43,12 +46,6 @@ function formatTime(t) {
   if (!t) return "";
   const [h, m] = t.split(":").map(Number);
   return `${h % 12 || 12}:${m.toString().padStart(2, "0")} ${h >= 12 ? "PM" : "AM"}`;
-}
-
-function genRef() {
-  const year = new Date().getFullYear();
-  const rand = Math.random().toString(36).slice(2, 8).toUpperCase();
-  return `DCA-${year}-${rand}`;
 }
 
 // ─── STEP BAR ─────────────────────────────────────────────────────────────────
@@ -497,7 +494,12 @@ function Tickets() {
   const [errors, setErrors] = useState({});
   const [vipError, setVipError] = useState("");
   const [booking, setBooking] = useState(null);
+  const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState("");
   const bodyRef = useRef(null);
+
+  // Clear an old booking error when the visitor moves to another step.
+  useEffect(() => { setSubmitError(""); }, [step]);
 
   function scrollToContent() {
     if (bodyRef.current) bodyRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -550,24 +552,59 @@ function Tickets() {
     setStep(4); scrollToContent();
   }
 
-  function step4Confirm() {
+  // Saves the booking on the server (MongoDB). It then shows up in the admin dashboard.
+  async function step4Confirm() {
+    if (submitting) return;
+    setSubmitting(true);
+    setSubmitError("");
+
     const items = TICKET_TYPES
       .filter((t) => (quantities[t.id] || 0) > 0)
       .map((t) => ({ id: t.id, name: t.name, price: t.price, qty: quantities[t.id], requiresId: t.requiresId }));
 
-    setBooking({
-      bookingReference: genRef(),
-      firstName: form.firstName,
-      lastName: form.lastName,
-      email: form.email,
-      phone: form.phone,
-      notes: form.notes,
-      visitDate,
-      visitTime,
-      items,
-      total,
-    });
-    setStep(5); scrollToContent();
+    try {
+      const res = await fetch(`${API_URL}/api/bookings/create`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          customer: {
+            firstName: form.firstName.trim(),
+            lastName: form.lastName.trim(),
+            email: form.email.trim(),
+            phone: form.phone.trim(),
+            notes: form.notes,
+          },
+          visitDate,
+          visitTime,
+          items: items.map((i) => ({ ticketTypeId: i.id, quantity: i.qty })),
+        }),
+      });
+      const data = await res.json().catch(() => null);
+      if (!res.ok) throw new Error((data && data.error) || "We could not complete your booking. Please try again.");
+
+      setBooking({
+        bookingReference: data.bookingReference,   // reference created by the server
+        firstName: form.firstName,
+        lastName: form.lastName,
+        email: form.email,
+        phone: form.phone,
+        notes: form.notes,
+        visitDate,
+        visitTime,
+        items,
+        total: data.total,                         // total calculated by the server
+      });
+      setStep(5); scrollToContent();
+    } catch (err) {
+      setSubmitError(
+        err instanceof TypeError
+          ? "Cannot reach the booking server. Please check your connection and try again."
+          : err.message
+      );
+      scrollToContent();
+    } finally {
+      setSubmitting(false);
+    }
   }
 
   function goBack() {
@@ -578,7 +615,7 @@ function Tickets() {
   function handleReset() {
     setStep(1); setQuantities({}); setVisitDate(""); setVisitTime("");
     setForm({ firstName: "", lastName: "", email: "", phone: "", notes: "" });
-    setErrors({}); setVipError(""); setBooking(null); setActiveTour("self_guided");
+    setErrors({}); setVipError(""); setBooking(null); setActiveTour("self_guided"); setSubmitError("");
     scrollToContent();
   }
 
@@ -586,7 +623,7 @@ function Tickets() {
     1: { label: "SELECT DATE",    action: step1Next,    disabled: totalTickets === 0 },
     2: { label: "ENTER DETAILS",  action: step2Next,    disabled: false },
     3: { label: "REVIEW ORDER",   action: step3Next,    disabled: false },
-    4: { label: "CONFIRM BOOKING",action: step4Confirm, disabled: false },
+    4: { label: submitting ? "BOOKING…" : "CONFIRM BOOKING", action: step4Confirm, disabled: submitting },
   };
   const nc = navConfig[step];
 
@@ -649,6 +686,9 @@ function Tickets() {
                 onEditDate={() => { setStep(2); scrollToContent(); }}
                 onEditCustomer={() => { setStep(3); scrollToContent(); }}
               />
+            )}
+            {step === 4 && submitError && (
+              <p className="tk-field-error tk-vip-error" role="alert">{submitError}</p>
             )}
 
             <div className="tk-nav-actions">
